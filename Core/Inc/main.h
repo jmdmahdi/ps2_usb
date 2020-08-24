@@ -60,6 +60,7 @@ void Error_Handler(void);
 /* Private defines -----------------------------------------------------------*/
 #define PS2Clock_Pin GPIO_PIN_0
 #define PS2Clock_GPIO_Port GPIOA
+#define PS2Clock_EXTI_IRQn EXTI0_IRQn
 #define PS2Data_Pin GPIO_PIN_1
 #define PS2Data_GPIO_Port GPIOA
 #define onBoardLED_Pin GPIO_PIN_8

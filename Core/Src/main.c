@@ -1,21 +1,21 @@
 /* USER CODE BEGIN Header */
 /**
-  ******************************************************************************
-  * @file           : main.c
-  * @brief          : Main program body
-  ******************************************************************************
-  * @attention
-  *
-  * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
-  * All rights reserved.</center></h2>
-  *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
-  *
-  ******************************************************************************
-  */
+ ******************************************************************************
+ * @file           : main.c
+ * @brief          : Main program body
+ ******************************************************************************
+ * @attention
+ *
+ * <h2><center>&copy; Copyright (c) 2020 STMicroelectronics.
+ * All rights reserved.</center></h2>
+ *
+ * This software component is licensed by ST under BSD 3-Clause license,
+ * the "License"; You may not use this file except in compliance with the
+ * License. You may obtain a copy of the License at:
+ *                        opensource.org/licenses/BSD-3-Clause
+ *
+ ******************************************************************************
+ */
 /* USER CODE END Header */
 
 /* Includes ------------------------------------------------------------------*/
@@ -31,7 +31,7 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-extern USBD_HandleTypeDef hUsbDeviceFS;
+
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -46,14 +46,15 @@ extern USBD_HandleTypeDef hUsbDeviceFS;
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
+extern USBD_HandleTypeDef hUsbDeviceFS;
+uint8_t convertKeys[132], convertE0Keys[126];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 /* USER CODE BEGIN PFP */
-
+void defineconvertKeys(void);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -96,12 +97,11 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  while (1)
-  {
+	while (1) {
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-  }
+	}
   /* USER CODE END 3 */
 }
 
@@ -185,9 +185,127 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(onBoardLED_GPIO_Port, &GPIO_InitStruct);
 
+  /* EXTI interrupt init*/
+  HAL_NVIC_SetPriority(EXTI0_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI0_IRQn);
+
 }
 
 /* USER CODE BEGIN 4 */
+
+/**
+ * @brief This function defines convert key codes from PS/2 (array key) to USB HID (array value).
+ * @param None
+ * @retval None
+ */
+void defineconvertKeys() {
+	// Convert keys from PS/2 (https://wiki.osdev.org/PS/2_Keyboard) to HID (https://www.usb.org/sites/default/files/documents/hut1_12v2.pdf)
+	convertKeys[1] = 66;
+	convertKeys[3] = 62;
+	convertKeys[4] = 60;
+	convertKeys[5] = 58;
+	convertKeys[6] = 59;
+	convertKeys[7] = 69;
+	convertKeys[9] = 67;
+	convertKeys[10] = 65;
+	convertKeys[11] = 63;
+	convertKeys[12] = 61;
+	convertKeys[13] = 43;
+	convertKeys[14] = 53;
+	convertKeys[17] = 226;
+	convertKeys[18] = 225;
+	convertKeys[20] = 224;
+	convertKeys[21] = 20;
+	convertKeys[22] = 30;
+	convertKeys[26] = 29;
+	convertKeys[27] = 22;
+	convertKeys[28] = 4;
+	convertKeys[29] = 26;
+	convertKeys[30] = 31;
+	convertKeys[33] = 6;
+	convertKeys[34] = 27;
+	convertKeys[35] = 7;
+	convertKeys[36] = 8;
+	convertKeys[37] = 33;
+	convertKeys[38] = 32;
+	convertKeys[41] = 44;
+	convertKeys[42] = 25;
+	convertKeys[43] = 9;
+	convertKeys[44] = 23;
+	convertKeys[45] = 21;
+	convertKeys[46] = 34;
+	convertKeys[49] = 17;
+	convertKeys[50] = 5;
+	convertKeys[51] = 11;
+	convertKeys[52] = 10;
+	convertKeys[53] = 28;
+	convertKeys[54] = 35;
+	convertKeys[58] = 16;
+	convertKeys[59] = 13;
+	convertKeys[60] = 24;
+	convertKeys[61] = 36;
+	convertKeys[62] = 37;
+	convertKeys[65] = 54;
+	convertKeys[66] = 14;
+	convertKeys[67] = 12;
+	convertKeys[68] = 18;
+	convertKeys[69] = 39;
+	convertKeys[70] = 38;
+	convertKeys[73] = 55;
+	convertKeys[74] = 56;
+	convertKeys[75] = 15;
+	convertKeys[76] = 51;
+	convertKeys[77] = 19;
+	convertKeys[78] = 45;
+	convertKeys[82] = 52;
+	convertKeys[84] = 47;
+	convertKeys[85] = 46;
+	convertKeys[88] = 57;
+	convertKeys[89] = 229;
+	convertKeys[90] = 40;
+	convertKeys[91] = 48;
+	convertKeys[93] = 49;
+	convertKeys[97] = 100;
+	convertKeys[102] = 42;
+	convertKeys[105] = 89;
+	convertKeys[107] = 92;
+	convertKeys[108] = 95;
+	convertKeys[112] = 98;
+	convertKeys[113] = 99;
+	convertKeys[114] = 90;
+	convertKeys[115] = 93;
+	convertKeys[116] = 94;
+	convertKeys[117] = 96;
+	convertKeys[118] = 41;
+	convertKeys[119] = 83;
+	convertKeys[120] = 68;
+	convertKeys[121] = 87;
+	convertKeys[122] = 91;
+	convertKeys[123] = 86;
+	convertKeys[124] = 85;
+	convertKeys[125] = 97;
+	convertKeys[126] = 71;
+	convertKeys[131] = 64;
+
+	convertE0Keys[17] = 230;
+	convertE0Keys[20] = 228;
+	convertE0Keys[31] = 227;
+	convertE0Keys[39] = 231;
+	convertE0Keys[47] = 101;
+	convertE0Keys[74] = 84;
+	convertE0Keys[90] = 88;
+	convertE0Keys[105] = 77;
+	convertE0Keys[107] = 80;
+	convertE0Keys[108] = 74;
+	convertE0Keys[112] = 73;
+	convertE0Keys[113] = 76;
+	convertE0Keys[114] = 81;
+	convertE0Keys[116] = 79;
+	convertE0Keys[117] = 82;
+	convertE0Keys[122] = 78;
+	convertE0Keys[124] = 70;
+	convertE0Keys[125] = 75;
+}
 
 /* USER CODE END 4 */
 
@@ -198,7 +316,7 @@ static void MX_GPIO_Init(void)
 void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
-  /* User can add his own implementation to report the HAL error return state */
+	/* User can add his own implementation to report the HAL error return state */
 
   /* USER CODE END Error_Handler_Debug */
 }
